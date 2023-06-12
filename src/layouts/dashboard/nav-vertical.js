@@ -47,7 +47,9 @@ export default function NavVertical({ openNav, onCloseNav }) {
         },
       }}
     >
-      <Logo sx={{ mt: 3, ml: 4, mb: 1 }} />
+      {/* <Logo sx={{ mt: 3, ml: 4, mb: 1 }} /> */}
+
+      <img src='https://redlightclub.net/images/common/logo-rounded.png' width={50}  alt='' style={{margin:'24px 0px 0px 24px'}} />
 
       <NavSectionVertical
         data={navData}

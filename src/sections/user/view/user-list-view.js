@@ -1,5 +1,5 @@
 import isEqual from 'lodash/isEqual';
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useEffect } from 'react';
 // @mui
 import { alpha } from '@mui/material/styles';
 import Tab from '@mui/material/Tab';
@@ -41,6 +41,7 @@ import {
 import UserTableRow from '../user-table-row';
 import UserTableToolbar from '../user-table-toolbar';
 import UserTableFiltersResult from '../user-table-filters-result';
+import api from '../../../api'
 
 // ----------------------------------------------------------------------
 
@@ -64,6 +65,18 @@ const defaultFilters = {
 // ----------------------------------------------------------------------
 
 export default function UserListView() {
+
+  const [ads, setAds] = useState([])
+
+  useEffect(() => {
+    api.get('/ads/get-all-ads').then(res=>{
+      setAds(res.data)
+    })
+  }, [])
+
+
+  
+
   const table = useTable();
 
   const settings = useSettingsContext();
@@ -268,7 +281,18 @@ export default function UserListView() {
                 />
 
                 <TableBody>
-                  {dataFiltered
+                  {ads.map(row=>(<UserTableRow
+                      key={row.id}
+                      row={row}
+                      selected={table.selected.includes(row.id)}
+                      onSelectRow={() => table.onSelectRow(row.id)}
+                      onDeleteRow={() => handleDeleteRow(row.id)}
+                      onEditRow={() => handleEditRow(row.id)}
+                    />))
+                  }
+             
+
+                  {/* {dataFiltered
                     .slice(
                       table.page * table.rowsPerPage,
                       table.page * table.rowsPerPage + table.rowsPerPage
@@ -282,7 +306,7 @@ export default function UserListView() {
                         onDeleteRow={() => handleDeleteRow(row.id)}
                         onEditRow={() => handleEditRow(row.id)}
                       />
-                    ))}
+                    ))} */}
 
                   <TableEmptyRows
                     height={denseHeight}
