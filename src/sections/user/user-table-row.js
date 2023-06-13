@@ -9,6 +9,9 @@ import Checkbox from '@mui/material/Checkbox';
 import TableCell from '@mui/material/TableCell';
 import IconButton from '@mui/material/IconButton';
 import ListItemText from '@mui/material/ListItemText';
+
+import axios from 'axios';
+
 // hooks
 import { useBoolean } from 'src/hooks/use-boolean';
 // components
@@ -22,13 +25,26 @@ import UserQuickEditForm from './user-quick-edit-form';
 // ----------------------------------------------------------------------
 
 export default function UserTableRow({ row, selected, onEditRow, onSelectRow, onDeleteRow }) {
-  const { adsTitle, profilePhoto, company='Redlightclub', role='User', status='active' , email, phoneNumber='234234' } = row;
+  const { adsTitle, profilePhoto, company=row.nationality, role=row.location, status='active' , email, phoneNumber='234234' } = row;
 
   const confirm = useBoolean();
 
   const quickEdit = useBoolean();
 
   const popover = usePopover();
+
+  function isURL(str) {
+    const pattern = new RegExp(
+      '^(https?:\\/\\/)?' + // protocol
+      '((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.)+[a-z]{2,}|' + // domain name
+      '((\\d{1,3}\\.){3}\\d{1,3}))' + // OR IP (v4) address
+      '(\\:\\d+)?(\\/[-a-z\\d%_.~+]*)*' + // port and path
+      '(\\?[;&a-z\\d%_.~+=-]*)?' + // query string
+      '(\\#[-a-z\\d_]*)?$',
+      'i'
+    );
+    return pattern.test(str);
+  }
 
   return (
     <>
@@ -38,7 +54,19 @@ export default function UserTableRow({ row, selected, onEditRow, onSelectRow, on
         </TableCell>
 
         <TableCell sx={{ display: 'flex', alignItems: 'center' }}>
-          <Avatar alt={adsTitle} src={profilePhoto} sx={{ mr: 2 }} />
+
+          <Avatar alt={adsTitle} src={ isURL(profilePhoto) ? profilePhoto 
+          : 
+            [
+              'https://api-dev-minimal-v5.vercel.app/assets/images/avatar/avatar_25.jpg',
+              'https://api-dev-minimal-v5.vercel.app/assets/images/avatar/avatar_20.jpg',
+              'https://api-dev-minimal-v5.vercel.app/assets/images/avatar/avatar_21.jpg',
+              'https://api-dev-minimal-v5.vercel.app/assets/images/avatar/avatar_23.jpg',
+              'https://api-dev-minimal-v5.vercel.app/assets/images/avatar/avatar_10.jpg',
+              'https://api-dev-minimal-v5.vercel.app/assets/images/avatar/avatar_11.jpg',
+              'https://api-dev-minimal-v5.vercel.app/assets/images/avatar/avatar_16.jpg'
+
+              ].at(Math.floor(Math.random()*7)) }/>
 
           <ListItemText
             primary={adsTitle}

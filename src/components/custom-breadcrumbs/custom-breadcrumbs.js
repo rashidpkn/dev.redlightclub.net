@@ -32,7 +32,7 @@ export default function CustomBreadcrumbs({
           )}
 
           {/* BREADCRUMBS */}
-          {!!links.length && (
+          {/* {!!links.length && (
             <Breadcrumbs separator={<Separator />} {...other}>
               {links.map((link) => (
                 <LinkItem
@@ -43,7 +43,7 @@ export default function CustomBreadcrumbs({
                 />
               ))}
             </Breadcrumbs>
-          )}
+          )} */}
         </Box>
 
         {action && <Box sx={{ flexShrink: 0 }}> {action} </Box>}

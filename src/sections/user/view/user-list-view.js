@@ -45,13 +45,13 @@ import api from '../../../api'
 
 // ----------------------------------------------------------------------
 
-const STATUS_OPTIONS = [{ value: 'all', label: 'All' }, ...USER_STATUS_OPTIONS];
+const STATUS_OPTIONS = [{ value: 'all', label: 'All' },{ value: 'active', label: 'Active' },{ value: 'inactive', label: 'In Active' },{ value: 'pending', label: 'Pending' }];
 
 const TABLE_HEAD = [
   { id: 'name', label: 'Name' },
-  { id: 'phoneNumber', label: 'Phone Number', width: 180 },
-  { id: 'company', label: 'Company', width: 220 },
-  { id: 'role', label: 'Role', width: 180 },
+  { id: 'phoneNumber', label: 'Phone', width: 180 },
+  { id: 'nationality', label: 'Nationality', width: 220 },
+  { id: 'location', label: 'Location', width: 180 },
   { id: 'status', label: 'Status', width: 100 },
   { id: '', width: 88 },
 ];
@@ -69,13 +69,13 @@ export default function UserListView() {
   const [ads, setAds] = useState([])
 
   useEffect(() => {
-    api.get('/ads/get-all-ads').then(res=>{
+    api.get('/ads/get-all-ads').then(res => {
       setAds(res.data)
     })
   }, [])
 
 
-  
+
 
   const table = useTable();
 
@@ -203,21 +203,21 @@ export default function UserListView() {
                     }
                     color={
                       (tab.value === 'active' && 'success') ||
+                      // (tab.value === 'inactive' && 'inactive') ||
                       (tab.value === 'pending' && 'warning') ||
-                      (tab.value === 'banned' && 'error') ||
                       'default'
                     }
                   >
-                    {tab.value === 'all' && _userList.length}
+                    {tab.value === 'all' && ads.length}
                     {tab.value === 'active' &&
-                      _userList.filter((user) => user.status === 'active').length}
+                      ads.filter((user) => user.visibility === true).length}
 
+                    {tab.value === 'inactive' &&
+                      ads.filter((user) => user.visibility === false).length}
                     {tab.value === 'pending' &&
-                      _userList.filter((user) => user.status === 'pending').length}
-                    {tab.value === 'banned' &&
-                      _userList.filter((user) => user.status === 'banned').length}
+                      ads.filter((user) => user.verificationRequest  === true).length}
                     {tab.value === 'rejected' &&
-                      _userList.filter((user) => user.status === 'rejected').length}
+                      ads.filter((user) => user.visibility === 'rejected').length}
                   </Label>
                 }
               />
@@ -281,16 +281,16 @@ export default function UserListView() {
                 />
 
                 <TableBody>
-                  {ads.map(row=>(<UserTableRow
-                      key={row.id}
-                      row={row}
-                      selected={table.selected.includes(row.id)}
-                      onSelectRow={() => table.onSelectRow(row.id)}
-                      onDeleteRow={() => handleDeleteRow(row.id)}
-                      onEditRow={() => handleEditRow(row.id)}
-                    />))
+                  {ads.map(row => (<UserTableRow
+                    key={row.id}
+                    row={row}
+                    selected={table.selected.includes(row.id)}
+                    onSelectRow={() => table.onSelectRow(row.id)}
+                    onDeleteRow={() => handleDeleteRow(row.id)}
+                    onEditRow={() => handleEditRow(row.id)}
+                  />))
                   }
-             
+
 
                   {/* {dataFiltered
                     .slice(
