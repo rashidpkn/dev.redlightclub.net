@@ -12,7 +12,11 @@ import {
 } from 'src/assets/illustrations';
 // components
 import { useSettingsContext } from 'src/components/settings';
+import { useEffect, useState } from 'react';
 //
+import FileDataActivity from 'src/sections/file-manager/file-data-activity';
+import api from 'src/api';
+
 import BookingBooked from '../booking-booked';
 import BookingNewest from '../booking-newest';
 import BookingDetails from '../booking-details';
@@ -23,32 +27,74 @@ import BookingWidgetSummary from '../booking-widget-summary';
 import BookingCheckInWidgets from '../booking-check-in-widgets';
 import BookingCustomerReviews from '../booking-customer-reviews';
 
+
 // ----------------------------------------------------------------------
 
 const SPACING = 3;
 
 export default function OverviewBookingView() {
+  const [state, setState] = useState({
+    active: 0,
+    totalBid: 0,
+    customer: 0,
+    totalIncome:0
+  })
+
+  const [activeAds, setActiveAds] = useState(0)
+  const [totalBid, setTotalBid] = useState(0)
+  const [customer, setCustomer] = useState(0)
+  const [totalIncome, setTotalIncome] = useState(0)
+
+  
+
   const theme = useTheme();
 
   const settings = useSettingsContext();
+
+  
+
+  useEffect(() => {
+    api.get('ads/get-all-ads').then(
+      res => {
+        setActiveAds(23)
+        // setActiveAds(res.data.length )
+      }
+    )
+    api.get('payment').then(res=>{
+      setTotalBid(res.data.length)
+      
+      setTotalIncome(res.data.reduce((a,b)=>a+b.amount,0))
+        // totalIncome:res.data.reduce((a,b)=>a+b.amount)
+      
+      
+    })
+
+    api.get('user').then(res=>{
+      setCustomer(res.data.length)
+      
+    })
+    // eslint-disable-next-line
+  }, [])
+
+
 
   return (
     <Container maxWidth={settings.themeStretch ? false : 'xl'}>
       <Grid container spacing={SPACING} disableEqualOverflow>
         <Grid xs={12} md={4}>
           <BookingWidgetSummary
-            title="Total Booking"
-            total={714000}
+            title="Active Profiles"
+            total={activeAds}
             icon={<BookingIllustration />}
           />
         </Grid>
 
         <Grid xs={12} md={4}>
-          <BookingWidgetSummary title="Sold" total={311000} icon={<CheckInIllustration />} />
+          <BookingWidgetSummary title="Total bids" total={totalBid} icon={<CheckInIllustration />} />
         </Grid>
 
         <Grid xs={12} md={4}>
-          <BookingWidgetSummary title="Canceled" total={124000} icon={<CheckOutIllustration />} />
+          <BookingWidgetSummary title="customers" total={customer} icon={<CheckOutIllustration />} />
         </Grid>
 
         <Grid container xs={12}>
@@ -56,7 +102,7 @@ export default function OverviewBookingView() {
             <Grid xs={12} md={6}>
               <BookingTotalIncomes
                 title="Total Incomes"
-                total={18765}
+                total={totalIncome}
                 percent={2.6}
                 chart={{
                   series: [
@@ -74,93 +120,88 @@ export default function OverviewBookingView() {
             </Grid>
 
             <Grid xs={12} md={6}>
-              <BookingBooked title="Booked" data={_bookingsOverview} />
+              <BookingBooked title="Ads statistics" data={_bookingsOverview} />
             </Grid>
 
             <Grid xs={12}>
               <BookingCheckInWidgets
                 chart={{
                   series: [
-                    { label: 'Sold', percent: 72, total: 38566 },
+                    { label: 'Bid sold', percent: 72, total: 38566 },
                     { label: 'Pending for payment', percent: 64, total: 18472 },
                   ],
                 }}
               />
             </Grid>
 
-            <Grid xs={12}>
-              <BookingStatistics
-                title="Statistics"
-                subheader="(+43% Sold | +12% Canceled) than last year"
+            <Grid xs={12} md={12} lg={12}>
+              <FileDataActivity
+                title="Data Activity"
                 chart={{
-                  colors: [theme.palette.primary.main, theme.palette.error.light],
-                  categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep'],
+                  labels: {
+                    week: ['Mon', 'Tue', 'Web', 'Thu', 'Fri', 'Sat', 'Sun'],
+                    month: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+                    year: ['2018', '2019', '2020', '2021', '2022'],
+                  },
+                  colors: [
+                    theme.palette.primary.main,
+                    theme.palette.error.main,
+                    theme.palette.warning.main,
+                    theme.palette.text.disabled,
+                  ],
                   series: [
                     {
                       type: 'Week',
                       data: [
-                        { name: 'Sold', data: [10, 41, 35, 151, 49, 62, 69, 91, 48] },
-                        { name: 'Canceled', data: [10, 34, 13, 56, 77, 88, 99, 77, 45] },
+                        { name: 'Profile created', data: [20, 34, 48, 65, 37, 48] },
+                        { name: 'Rejected', data: [10, 34, 13, 26, 27, 28] },
+                        { name: 'Verified', data: [10, 14, 13, 16, 17, 18] },
+                        { name: 'Spot bidded', data: [5, 12, 6, 7, 8, 9] },
                       ],
                     },
                     {
                       type: 'Month',
                       data: [
-                        { name: 'Sold', data: [148, 91, 69, 62, 49, 51, 35, 41, 10] },
-                        { name: 'Canceled', data: [45, 77, 99, 88, 77, 56, 13, 34, 10] },
+                        { name: 'Profile created', data: [10, 34, 13, 56, 77, 88, 99, 77, 45, 12, 43, 34] },
+                        { name: 'Rejected', data: [10, 34, 13, 56, 77, 88, 99, 77, 45, 12, 43, 34] },
+                        { name: 'Verified', data: [10, 34, 13, 56, 77, 88, 99, 77, 45, 12, 43, 34] },
+                        { name: 'Spot bidded', data: [10, 34, 13, 56, 77, 88, 99, 77, 45, 12, 43, 34] },
                       ],
                     },
                     {
                       type: 'Year',
                       data: [
-                        { name: 'Sold', data: [76, 42, 29, 41, 27, 138, 117, 86, 63] },
-                        { name: 'Canceled', data: [80, 55, 34, 114, 80, 130, 15, 28, 55] },
+                        { name: 'Profile created', data: [10, 34, 13, 56, 77] },
+                        { name: 'Rejected', data: [10, 34, 13, 56, 77] },
+                        { name: 'Verified', data: [10, 34, 13, 56, 77] },
+                        { name: 'Spot bidded', data: [10, 34, 13, 56, 77] },
                       ],
                     },
                   ],
                 }}
               />
+
+
             </Grid>
           </Grid>
 
           <Grid xs={12} md={4}>
             <BookingAvailable
-              title="Tours Available"
+              title="Slot available"
               chart={{
                 series: [
-                  { label: 'Sold out', value: 120 },
-                  { label: 'Available', value: 66 },
+                  { label: 'Sold out', value: 2 },
+                  { label: 'Available', value: 16 },
                 ],
               }}
             />
 
-            <BookingCustomerReviews
-              title="Customer Reviews"
-              subheader={`${_bookingReview.length} Reviews`}
-              list={_bookingReview}
-              sx={{ mt: SPACING }}
-            />
           </Grid>
         </Grid>
 
-        <Grid xs={12}>
-          <BookingNewest title="Newest Booking" subheader="12 Booking" list={_bookingNew} />
-        </Grid>
 
-        <Grid xs={12}>
-          <BookingDetails
-            title="Booking Details"
-            tableData={_bookings}
-            tableLabels={[
-              { id: 'destination', label: 'Destination' },
-              { id: 'customer', label: 'Customer' },
-              { id: 'checkIn', label: 'Check In' },
-              { id: 'checkOut', label: 'Check Out' },
-              { id: 'status', label: 'Status' },
-              { id: '' },
-            ]}
-          />
-        </Grid>
+
+
       </Grid>
     </Container>
   );

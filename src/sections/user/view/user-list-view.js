@@ -68,10 +68,15 @@ export default function UserListView() {
 
   const [ads, setAds] = useState([])
 
+const fetchAds = ()=>{
+  api.get('/ads/get-all-ads').then(res => {
+    setAds(res.data)
+  })
+}
+
+
   useEffect(() => {
-    api.get('/ads/get-all-ads').then(res => {
-      setAds(res.data)
-    })
+  fetchAds()
   }, [])
 
 
@@ -284,9 +289,10 @@ export default function UserListView() {
                   {ads.map(row => (<UserTableRow
                     key={row.id}
                     row={row}
+                    fetchAds={fetchAds}
                     selected={table.selected.includes(row.id)}
                     onSelectRow={() => table.onSelectRow(row.id)}
-                    onDeleteRow={() => handleDeleteRow(row.id)}
+                    onDeleteRow={fetchAds}
                     onEditRow={() => handleEditRow(row.id)}
                   />))
                   }

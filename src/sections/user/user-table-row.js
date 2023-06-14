@@ -10,7 +10,7 @@ import TableCell from '@mui/material/TableCell';
 import IconButton from '@mui/material/IconButton';
 import ListItemText from '@mui/material/ListItemText';
 
-import axios from 'axios';
+import api from 'src/api';
 
 // hooks
 import { useBoolean } from 'src/hooks/use-boolean';
@@ -64,9 +64,7 @@ export default function UserTableRow({ row, selected, onEditRow, onSelectRow, on
               'https://api-dev-minimal-v5.vercel.app/assets/images/avatar/avatar_23.jpg',
               'https://api-dev-minimal-v5.vercel.app/assets/images/avatar/avatar_10.jpg',
               'https://api-dev-minimal-v5.vercel.app/assets/images/avatar/avatar_11.jpg',
-              'https://api-dev-minimal-v5.vercel.app/assets/images/avatar/avatar_16.jpg'
-
-              ].at(Math.floor(Math.random()*7)) }/>
+              'https://api-dev-minimal-v5.vercel.app/assets/images/avatar/avatar_16.jpg'].at(Math.floor(Math.random()*7)) }/>
 
           <ListItemText
             primary={adsTitle}
@@ -119,8 +117,12 @@ export default function UserTableRow({ row, selected, onEditRow, onSelectRow, on
       >
         <MenuItem
           onClick={() => {
-            confirm.onTrue();
-            popover.onClose();
+            api.post('/ads/delete',{
+              id:row.id
+            })
+            // confirm.onTrue();
+            // popover.onClose();
+            onDeleteRow()
           }}
           sx={{ color: 'error.main' }}
         >
@@ -145,6 +147,7 @@ export default function UserTableRow({ row, selected, onEditRow, onSelectRow, on
         title="Delete"
         content="Are you sure want to delete?"
         action={
+          
           <Button variant="contained" color="error" onClick={onDeleteRow}>
             Delete
           </Button>
