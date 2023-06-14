@@ -136,7 +136,8 @@ export default function OverviewBookingView() {
 
             <Grid xs={12} md={12} lg={12}>
               <FileDataActivity
-                title="Data Activity"
+                title="Profile Activity"
+
                 chart={{
                   labels: {
                     week: ['Mon', 'Tue', 'Web', 'Thu', 'Fri', 'Sat', 'Sun'],
