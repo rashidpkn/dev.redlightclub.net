@@ -49,7 +49,7 @@ export default function BookingAvailable({ title, subheader, chart, ...other }) 
           name: { offsetY: -16 },
           value: { offsetY: 8 },
           total: {
-            label: 'Tours',
+            label: 'Slots',
             formatter: () => fNumber(total),
           },
         },
