@@ -49,7 +49,7 @@ export default function BookingAvailable({ title, subheader, chart, ...other }) 
           name: { offsetY: -16 },
           value: { offsetY: 8 },
           total: {
-            label: 'Slots',
+            label: 'Spot',
             formatter: () => fNumber(total),
           },
         },
@@ -87,7 +87,7 @@ export default function BookingAvailable({ title, subheader, chart, ...other }) 
               }}
             />
             <Box sx={{ color: 'text.secondary', flexGrow: 1 }}>{item.label}</Box>
-            {item.value} Tours
+            {item.value} Spot
           </Stack>
         ))}
       </Stack>

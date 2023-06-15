@@ -33,14 +33,8 @@ import BookingCustomerReviews from '../booking-customer-reviews';
 const SPACING = 3;
 
 export default function OverviewBookingView() {
-  const [state, setState] = useState({
-    active: 0,
-    totalBid: 0,
-    customer: 0,
-    totalIncome:0
-  })
 
-  const [activeAds, setActiveAds] = useState(0)
+  const [ads, setAds] = useState([])
   const [totalBid, setTotalBid] = useState(0)
   const [customer, setCustomer] = useState(0)
   const [totalIncome, setTotalIncome] = useState(0)
@@ -56,8 +50,8 @@ export default function OverviewBookingView() {
   useEffect(() => {
     api.get('ads/get-all-ads').then(
       res => {
-        setActiveAds(23)
-        // setActiveAds(res.data.length )
+        // setActiveAds(23)
+        setAds(res.data)
       }
     )
     api.get('payment').then(res=>{
@@ -84,7 +78,7 @@ export default function OverviewBookingView() {
         <Grid xs={12} md={4}>
           <BookingWidgetSummary
             title="Active Profiles"
-            total={activeAds}
+            total={ads?.filter(e=>e.visibility)?.length}
             icon={<BookingIllustration />}
           />
         </Grid>
@@ -120,14 +114,14 @@ export default function OverviewBookingView() {
             </Grid>
 
             <Grid xs={12} md={6}>
-              <BookingBooked title="Ads statistics" data={_bookingsOverview} />
+              <BookingBooked title="Ads statistics" ads={ads} data={_bookingsOverview} />
             </Grid>
 
             <Grid xs={12}>
               <BookingCheckInWidgets
                 chart={{
                   series: [
-                    { label: 'Bid sold', percent: 72, total: 38566 },
+                    { label: 'Bid sold', percent: 72, total: totalIncome },
                     { label: 'Pending for payment', percent: 64, total: 18472 },
                   ],
                 }}

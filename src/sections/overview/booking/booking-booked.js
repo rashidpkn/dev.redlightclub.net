@@ -11,13 +11,81 @@ import { fShortenNumber } from 'src/utils/format-number';
 
 // ----------------------------------------------------------------------
 
-export default function BookingBooked({ title, subheader, data, ...other }) {
+export default function BookingBooked({ title, subheader, data,ads ,...other}) {
+
   return (
     <Card {...other}>
       <CardHeader title={title} subheader={subheader} />
 
       <Stack spacing={3} sx={{ p: 3 }}>
-        {data.map((progress) => (
+      <Stack key='Pending'>
+            <Stack
+              direction="row"
+              alignItems="center"
+              justifyContent="space-between"
+              sx={{ mb: 1 }}
+            >
+              <Box sx={{ typography: 'overline' }}>Pending</Box>
+              <Box sx={{ typography: 'subtitle1' }}>{ads?.filter(e=>e.verificationRequest).length}</Box>
+            </Stack>
+
+            <LinearProgress
+              variant="determinate"
+              value={ads?.filter(e=>e.verificationRequest).length}
+              color={
+                // (progress.status === 'Pending' && 'warning') ||
+                // (progress.status === 'Canceled' && 'error') ||
+                'success'
+              }
+              sx={{ height: 8, bgcolor: (theme) => alpha(theme.palette.grey[500], 0.16) }}
+            />
+          </Stack>
+          <Stack key='Canceled'>
+            <Stack
+              direction="row"
+              alignItems="center"
+              justifyContent="space-between"
+              sx={{ mb: 1 }}
+            >
+              <Box sx={{ typography: 'overline' }}>Canceled</Box>
+              <Box sx={{ typography: 'subtitle1' }}>{ads?.filter(e=>!e.verificationRequest && e.verificationImage && !e.verify).length}</Box>
+            </Stack>
+
+            <LinearProgress
+              variant="determinate"
+              value={ads?.filter(e=>!e.verificationRequest && e.verificationImage && !e.verify).length}
+              color={
+                // (progress.status === 'Pending' && 'warning') ||
+                // (progress.status === 'Canceled' && 'error') ||
+                'success'
+              }
+              sx={{ height: 8, bgcolor: (theme) => alpha(theme.palette.grey[500], 0.16) }}
+            />
+          </Stack>
+          <Stack key='Rejected'>
+            <Stack
+              direction="row"
+              alignItems="center"
+              justifyContent="space-between"
+              sx={{ mb: 1 }}
+            >
+              <Box sx={{ typography: 'overline' }}>Rejected</Box>
+              <Box sx={{ typography: 'subtitle1' }}>{ads.filter(e=>!e.visibility).length}</Box>
+            </Stack>
+
+            <LinearProgress
+              variant="determinate"
+              value={ads.filter(e=>!e.visibility).length}
+              color={
+                // (progress.status === 'Pending' && 'warning') ||
+                // (progress.status === 'Canceled' && 'error') ||
+                'success'
+              }
+              sx={{ height: 8, bgcolor: (theme) => alpha(theme.palette.grey[500], 0.16) }}
+            />
+          </Stack>
+
+        {/* {data.map((progress) => (
           <Stack key={progress.status}>
             <Stack
               direction="row"
@@ -40,7 +108,7 @@ export default function BookingBooked({ title, subheader, data, ...other }) {
               sx={{ height: 8, bgcolor: (theme) => alpha(theme.palette.grey[500], 0.16) }}
             />
           </Stack>
-        ))}
+        ))} */}
       </Stack>
     </Card>
   );
@@ -50,4 +118,5 @@ BookingBooked.propTypes = {
   data: PropTypes.array,
   subheader: PropTypes.string,
   title: PropTypes.string,
+  ads:PropTypes.array
 };
