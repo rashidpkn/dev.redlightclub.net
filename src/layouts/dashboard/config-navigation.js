@@ -58,14 +58,15 @@ export function useNavData() {
           { title: t('Profile'), path: paths.dashboard.user.list, icon: ICONS.dashboard },
 
           { title: t('Reported Issues'), path: paths.dashboard.general.ecommerce, icon: ICONS.ecommerce },
-          { title: t('Blacklisted Profiles'), path: paths.dashboard.general.analytics, icon: ICONS.analytics },
+          // { title: t('Blacklisted Profiles'), path: paths.dashboard.general.analytics, icon: ICONS.analytics },
           { title: t('Auction in Progress'), path: paths.dashboard.general.banking, icon: ICONS.banking },
           { title: t('Payment History'), path: paths.dashboard.general.booking, icon: ICONS.booking },
           { title: t('Site Analytics'), path: paths.dashboard.general.file, icon: ICONS.file },
           { title: t('Ads Analytics'), path: paths.dashboard.general.file, icon: ICONS.file },
           { title: t('Banner'), path: paths.dashboard.general.file, icon: ICONS.file },
           { title: t('Affillative'), path: paths.dashboard.general.file, icon: ICONS.file },
-          { title: t('Support'), path: paths.dashboard.general.file, icon: ICONS.file },
+          // { title: t('Support'), path: paths.dashboard.general.file, icon: ICONS.file },
+          { title: t('Support'), path: paths.dashboard.chat, icon: ICONS.chat, },
         ],
       },
 

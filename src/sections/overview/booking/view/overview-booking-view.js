@@ -97,17 +97,14 @@ export default function OverviewBookingView() {
               <BookingTotalIncomes
                 title="Total Incomes"
                 total={totalIncome}
-                percent={2.6}
+                percent={1000}
                 chart={{
                   series: [
-                    { x: 2016, y: 111 },
-                    { x: 2017, y: 136 },
-                    { x: 2018, y: 76 },
-                    { x: 2019, y: 108 },
-                    { x: 2020, y: 74 },
-                    { x: 2021, y: 54 },
-                    { x: 2022, y: 57 },
-                    { x: 2023, y: 84 },
+                    { x: 'Jan', y: 200 },
+                    { x: 'Feb', y: 0 },
+                    { x: 'Mar', y: 320 },
+                    { x: 'Apr', y: 40 },
+                    { x: 'May', y: 400 },
                   ],
                 }}
               />
@@ -121,8 +118,8 @@ export default function OverviewBookingView() {
               <BookingCheckInWidgets
                 chart={{
                   series: [
-                    { label: 'Bid sold', percent: 72, total: totalIncome },
-                    { label: 'Pending for payment', percent: 64, total: 18472 },
+                    { label: 'Bid sold', percent: 100, total: totalIncome },
+                    { label: 'Pending for payment', percent: 0, total: 0 },
                   ],
                 }}
               />

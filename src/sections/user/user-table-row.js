@@ -11,6 +11,7 @@ import IconButton from '@mui/material/IconButton';
 import ListItemText from '@mui/material/ListItemText';
 
 import api from 'src/api';
+import { Badge, styled } from '@mui/material';
 
 // hooks
 import { useBoolean } from 'src/hooks/use-boolean';
@@ -21,6 +22,7 @@ import CustomPopover, { usePopover } from 'src/components/custom-popover';
 import { ConfirmDialog } from 'src/components/custom-dialog';
 //
 import UserQuickEditForm from './user-quick-edit-form';
+
 
 // ----------------------------------------------------------------------
 
@@ -55,6 +57,11 @@ export default function UserTableRow({ row, selected, onEditRow, onSelectRow, on
 
         <TableCell sx={{ display: 'flex', alignItems: 'center' }}>
 
+<StyledBadge
+        overlap="circular"
+        anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
+        variant="dot"
+      >
           <Avatar alt={adsTitle} src={ isURL(profilePhoto) ? profilePhoto 
           : 
             [
@@ -65,7 +72,7 @@ export default function UserTableRow({ row, selected, onEditRow, onSelectRow, on
               'https://api-dev-minimal-v5.vercel.app/assets/images/avatar/avatar_10.jpg',
               'https://api-dev-minimal-v5.vercel.app/assets/images/avatar/avatar_11.jpg',
               'https://api-dev-minimal-v5.vercel.app/assets/images/avatar/avatar_16.jpg'].at(Math.floor(Math.random()*7)) }/>
-
+</StyledBadge>
           <ListItemText
             primary={adsTitle}
             secondary={email}
@@ -164,3 +171,32 @@ UserTableRow.propTypes = {
   row: PropTypes.object,
   selected: PropTypes.bool,
 };
+
+const StyledBadge = styled(Badge)(({ theme }) => ({
+  '& .MuiBadge-badge': {
+    backgroundColor: '#44b700',
+    color: '#44b700',
+    boxShadow: `0 0 0 2px ${theme.palette.background.paper}`,
+    '&::after': {
+      position: 'absolute',
+      top: 0,
+      left: 0,
+      width: '100%',
+      height: '100%',
+      borderRadius: '50%',
+      animation: 'ripple 1.2s infinite ease-in-out',
+      border: '1px solid currentColor',
+      content: '""',
+    },
+  },
+  '@keyframes ripple': {
+    '0%': {
+      transform: 'scale(.8)',
+      opacity: 1,
+    },
+    '100%': {
+      transform: 'scale(2.4)',
+      opacity: 0,
+    },
+  },
+}));

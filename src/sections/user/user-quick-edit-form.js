@@ -29,30 +29,21 @@ export default function UserQuickEditForm({ currentUser, open, onClose }) {
   const { enqueueSnackbar } = useSnackbar();
 
   const NewUserSchema = Yup.object().shape({
-    name: Yup.string().required('Name is required'),
+    adsTitle: Yup.string().required('Name is required'),
     email: Yup.string().required('Email is required').email('Email must be a valid email address'),
     phoneNumber: Yup.string().required('Phone number is required'),
-    address: Yup.string().required('Address is required'),
-    country: Yup.string().required('Country is required'),
-    company: Yup.string().required('Company is required'),
-    state: Yup.string().required('State is required'),
-    city: Yup.string().required('City is required'),
-    role: Yup.string().required('Role is required'),
+    location: Yup.string().required('location is required'),
+    nationality: Yup.string().required('location is required'), 
   });
 
   const defaultValues = useMemo(
     () => ({
-      name: currentUser?.name || '',
+      adsTitle: currentUser?.adsTitle || '',
       email: currentUser?.email || '',
-      phoneNumber: currentUser?.phoneNumber || '',
-      address: currentUser?.address || '',
-      country: currentUser?.country || '',
-      state: currentUser?.state || '',
-      city: currentUser?.city || '',
-      zipCode: currentUser?.zipCode || '',
-      status: currentUser?.status,
-      company: currentUser?.company || '',
-      role: currentUser?.role || '',
+      phoneNumber: currentUser?.phone.number || '',
+      location: currentUser?.location || '',
+      nationality: currentUser?.nationality || '',
+     
     }),
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [currentUser]
@@ -120,45 +111,12 @@ export default function UserQuickEditForm({ currentUser, open, onClose }) {
             </RHFSelect>
 
             <Box sx={{ display: { xs: 'none', sm: 'block' } }} />
-
-            <RHFTextField name="name" label="Full Name" />
+            <RHFTextField name="type" label="Type" />
+            <RHFTextField name="adsTitle" label="Ads Title" />
+            <RHFTextField name="phoneNumber" label="phone" />
+            <RHFTextField name="location" label="location" />
+            <RHFTextField name="nationality" label="Nationality" />
             <RHFTextField name="email" label="Email Address" />
-            <RHFTextField name="phoneNumber" label="Phone Number" />
-
-            <RHFAutocomplete
-              name="country"
-              label="Country"
-              options={countries.map((country) => country.label)}
-              getOptionLabel={(option) => option}
-              renderOption={(props, option) => {
-                const { code, label, phone } = countries.filter(
-                  (country) => country.label === option
-                )[0];
-
-                if (!label) {
-                  return null;
-                }
-
-                return (
-                  <li {...props} key={label}>
-                    <Iconify
-                      key={label}
-                      icon={`circle-flags:${code.toLowerCase()}`}
-                      width={28}
-                      sx={{ mr: 1 }}
-                    />
-                    {label} ({code}) +{phone}
-                  </li>
-                );
-              }}
-            />
-
-            <RHFTextField name="state" label="State/Region" />
-            <RHFTextField name="city" label="City" />
-            <RHFTextField name="address" label="Address" />
-            <RHFTextField name="zipCode" label="Zip/Code" />
-            <RHFTextField name="company" label="Company" />
-            <RHFTextField name="role" label="Role" />
           </Box>
         </DialogContent>
 

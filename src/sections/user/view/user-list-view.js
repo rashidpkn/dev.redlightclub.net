@@ -45,7 +45,7 @@ import api from '../../../api'
 
 // ----------------------------------------------------------------------
 
-const STATUS_OPTIONS = [{ value: 'all', label: 'All' },{ value: 'active', label: 'Active' },{ value: 'inactive', label: 'In Active' },{ value: 'pending', label: 'Pending' }];
+const STATUS_OPTIONS = [{ value: 'all', label: 'All' },{ value: 'active', label: 'Active' },{ value: 'inactive', label: 'In Active' },{ value: 'pending', label: 'Pending' },{value:'blacklisted',label:'Blacklisted'}];
 
 const TABLE_HEAD = [
   { id: 'name', label: 'Name' },
@@ -233,7 +233,7 @@ const fetchAds = ()=>{
             filters={filters}
             onFilters={handleFilters}
             //
-            roleOptions={_roles}
+            roleOptions={['Dubai','Thailand','UK']}
           />
 
           {canReset && (
