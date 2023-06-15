@@ -8,6 +8,7 @@ import Card from '@mui/material/Card';
 import LinearProgress from '@mui/material/LinearProgress';
 // utils
 import { fShortenNumber } from 'src/utils/format-number';
+import { orange, red, yellow } from '@mui/material/colors';
 
 // ----------------------------------------------------------------------
 
@@ -32,11 +33,14 @@ export default function BookingBooked({ title, subheader, data,ads ,...other}) {
             <LinearProgress
               variant="determinate"
               value={ads?.filter(e=>e.verificationRequest).length}
+              // value={50}
               color={
                 // (progress.status === 'Pending' && 'warning') ||
                 // (progress.status === 'Canceled' && 'error') ||
-                'success'
+               'warning'
+
               }
+              
               sx={{ height: 8, bgcolor: (theme) => alpha(theme.palette.grey[500], 0.16) }}
             />
           </Stack>
@@ -54,10 +58,11 @@ export default function BookingBooked({ title, subheader, data,ads ,...other}) {
             <LinearProgress
               variant="determinate"
               value={ads?.filter(e=>!e.verificationRequest && e.verificationImage && !e.verify).length}
+              // value={50}
               color={
                 // (progress.status === 'Pending' && 'warning') ||
                 // (progress.status === 'Canceled' && 'error') ||
-                'success'
+                'error'
               }
               sx={{ height: 8, bgcolor: (theme) => alpha(theme.palette.grey[500], 0.16) }}
             />
@@ -69,7 +74,7 @@ export default function BookingBooked({ title, subheader, data,ads ,...other}) {
               justifyContent="space-between"
               sx={{ mb: 1 }}
             >
-              <Box sx={{ typography: 'overline' }}>Rejected</Box>
+              <Box sx={{ typography: 'overline' }}>Banned</Box>
               <Box sx={{ typography: 'subtitle1' }}>{ads.filter(e=>!e.visibility).length}</Box>
             </Stack>
 
