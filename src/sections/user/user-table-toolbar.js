@@ -1,5 +1,6 @@
 import PropTypes from 'prop-types';
 import { useCallback } from 'react';
+import './view/user-list.css'
 // @mui
 import Stack from '@mui/material/Stack';
 import MenuItem from '@mui/material/MenuItem';
@@ -59,10 +60,12 @@ export default function UserTableToolbar({
         <FormControl
           sx={{
             flexShrink: 0,
-            width: { xs: 1, md: 200 },
+            width: { xs: 5, md: 200 },
           }}
         >
-          <InputLabel>Locations</InputLabel>
+          <div style={{background:'white',padding:'0px 5px'}}>
+            <InputLabel>Locations</InputLabel>
+          </div>
 
           <Select
             multiple

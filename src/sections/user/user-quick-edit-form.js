@@ -29,6 +29,7 @@ export default function UserQuickEditForm({ currentUser, open, onClose }) {
   const { enqueueSnackbar } = useSnackbar();
 
   const NewUserSchema = Yup.object().shape({
+    type: Yup.string().required('Type is required'),
     adsTitle: Yup.string().required('Name is required'),
     email: Yup.string().required('Email is required').email('Email must be a valid email address'),
     phoneNumber: Yup.string().required('Phone number is required'),
@@ -38,6 +39,7 @@ export default function UserQuickEditForm({ currentUser, open, onClose }) {
 
   const defaultValues = useMemo(
     () => ({
+      type: currentUser?.type || 'Individual',
       adsTitle: currentUser?.adsTitle || '',
       email: currentUser?.email || '',
       phoneNumber: currentUser?.phone.number || '',

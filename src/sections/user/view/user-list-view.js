@@ -45,7 +45,7 @@ import api from '../../../api'
 
 // ----------------------------------------------------------------------
 
-const STATUS_OPTIONS = [{ value: 'all', label: 'All' },{ value: 'active', label: 'Active' },{ value: 'inactive', label: 'In Active' },{ value: 'pending', label: 'Pending' },{value:'blacklisted',label:'Blacklisted'}];
+const STATUS_OPTIONS = [{ value: 'all', label: 'All' },{ value: 'active', label: 'Active' },{ value: 'inactive', label: 'Inactive' },{ value: 'pending', label: 'Pending' },{value:'rejected',label:'Rejected'},{value:'banned',label:'Banned'}];
 
 const TABLE_HEAD = [
   { id: 'name', label: 'Name' },
@@ -93,6 +93,12 @@ const fetchAds = ()=>{
   const [tableData, setTableData] = useState(_userList);
 
   const [filters, setFilters] = useState(defaultFilters);
+  useEffect(() => {
+    
+  console.log(filters);
+  // eslint-disable-next-line
+  }, [filters])
+  
 
   const dataFiltered = applyFilter({
     inputData: tableData,
@@ -122,15 +128,6 @@ const fetchAds = ()=>{
     [table]
   );
 
-  const handleDeleteRow = useCallback(
-    (id) => {
-      const deleteRow = tableData.filter((row) => row.id !== id);
-      setTableData(deleteRow);
-
-      table.onUpdatePageDeleteRow(dataInPage.length);
-    },
-    [dataInPage.length, table, tableData]
-  );
 
   const handleDeleteRows = useCallback(() => {
     const deleteRows = tableData.filter((row) => !table.selected.includes(row.id));
@@ -160,6 +157,8 @@ const fetchAds = ()=>{
   const handleResetFilters = useCallback(() => {
     setFilters(defaultFilters);
   }, []);
+
+  const [location, setLocation] = useState([])
 
   return (
     <>
@@ -208,21 +207,18 @@ const fetchAds = ()=>{
                     }
                     color={
                       (tab.value === 'active' && 'success') ||
-                      // (tab.value === 'inactive' && 'inactive') ||
                       (tab.value === 'pending' && 'warning') ||
-                      'default'
-                    }
+                      (tab.value === 'rejected' && '') ||
+                      (tab.value === 'banned' && '') ||
+                      'default'}
                   >
-                    {tab.value === 'all' && ads.length}
-                    {tab.value === 'active' &&
-                      ads.filter((user) => user.visibility === true).length}
 
-                    {tab.value === 'inactive' &&
-                      ads.filter((user) => user.visibility === false).length}
-                    {tab.value === 'pending' &&
-                      ads.filter((user) => user.verificationRequest  === true).length}
-                    {tab.value === 'rejected' &&
-                      ads.filter((user) => user.visibility === 'rejected').length}
+                    {tab.value === 'all' && ads.length}
+                    {tab.value === 'active' && ads.filter((user) => user.visibility === true).length}
+                    {tab.value === 'inactive' && ads.filter((user) => user.visibility === false).length}
+                    {tab.value === 'pending' && ads.filter((user) => user.verificationRequest  === true).length}
+                    {tab.value === 'rejected' && ads.filter((user) => user.visibility === 'rejected').length}
+                    {tab.value === 'banned' && ads.filter((user) => user.visibility === 'rejected').length}
                   </Label>
                 }
               />
@@ -230,6 +226,7 @@ const fetchAds = ()=>{
           </Tabs>
 
           <UserTableToolbar
+          
             filters={filters}
             onFilters={handleFilters}
             //
