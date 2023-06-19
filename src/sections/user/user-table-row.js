@@ -27,7 +27,7 @@ import UserQuickEditForm from './user-quick-edit-form';
 // ----------------------------------------------------------------------
 
 export default function UserTableRow({ row, selected, onEditRow, onSelectRow, onDeleteRow }) {
-  const { adsTitle, profilePhoto, company=row.nationality, role=row.location, status='active' , email, phoneNumber='234234' } = row;
+  const { adsTitle, profilePhoto, company=row.nationality, role=row.location, status=row.visibility ? 'active' :'inactive' , email, phoneNumber='234234' } = row;
 
   const confirm = useBoolean();
 
@@ -61,6 +61,7 @@ export default function UserTableRow({ row, selected, onEditRow, onSelectRow, on
         overlap="circular"
         anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
         variant="dot"
+        status ={status}
       >
           <Avatar alt={adsTitle} src={ isURL(profilePhoto) ? profilePhoto 
           : 
@@ -172,10 +173,10 @@ UserTableRow.propTypes = {
   selected: PropTypes.bool,
 };
 
-const StyledBadge = styled(Badge)(({ theme }) => ({
+const StyledBadge = styled(Badge)(({ theme,status }) => ({
   '& .MuiBadge-badge': {
-    backgroundColor: '#44b700',
-    color: '#44b700',
+    backgroundColor: status ==='active' ? '#44b700' : '#ff0000',
+    color: status ==='active' ? '#44b700' : '#ff0000',
     boxShadow: `0 0 0 2px ${theme.palette.background.paper}`,
     '&::after': {
       position: 'absolute',

@@ -17,7 +17,7 @@ import { paths } from 'src/routes/paths';
 import { useRouter } from 'src/routes/hook';
 import { RouterLink } from 'src/routes/components';
 // _mock
-import { _userList, _roles, USER_STATUS_OPTIONS } from 'src/_mock';
+import { _userList, } from 'src/_mock';
 // hooks
 import { useBoolean } from 'src/hooks/use-boolean';
 // components
@@ -45,7 +45,7 @@ import api from '../../../api'
 
 // ----------------------------------------------------------------------
 
-const STATUS_OPTIONS = [{ value: 'all', label: 'All' },{ value: 'active', label: 'Active' },{ value: 'inactive', label: 'Inactive' },{ value: 'pending', label: 'Pending' },{value:'rejected',label:'Rejected'},{value:'banned',label:'Banned'}];
+const STATUS_OPTIONS = [{ value: 'all', label: 'All' }, { value: 'active', label: 'Active' }, { value: 'inactive', label: 'Inactive' }, { value: 'pending', label: 'Pending' }, { value: 'rejected', label: 'Rejected' }, { value: 'banned', label: 'Banned' }];
 
 const TABLE_HEAD = [
   { id: 'name', label: 'Name' },
@@ -68,15 +68,15 @@ export default function UserListView() {
 
   const [ads, setAds] = useState([])
 
-const fetchAds = ()=>{
-  api.get('/ads/get-all-ads').then(res => {
-    setAds(res.data)
-  })
-}
+  const fetchAds = () => {
+    api.get('/ads/get-all-ads').then(res => {
+      setAds(res.data)
+    })
+  }
 
 
   useEffect(() => {
-  fetchAds()
+    fetchAds()
   }, [])
 
 
@@ -93,12 +93,6 @@ const fetchAds = ()=>{
   const [tableData, setTableData] = useState(_userList);
 
   const [filters, setFilters] = useState(defaultFilters);
-  useEffect(() => {
-    
-  console.log(filters);
-  // eslint-disable-next-line
-  }, [filters])
-  
 
   const dataFiltered = applyFilter({
     inputData: tableData,
@@ -158,7 +152,11 @@ const fetchAds = ()=>{
     setFilters(defaultFilters);
   }, []);
 
-  const [location, setLocation] = useState([])
+  useEffect(() => {
+
+    console.log(filters);
+  }, [filters])
+
 
   return (
     <>
@@ -216,7 +214,7 @@ const fetchAds = ()=>{
                     {tab.value === 'all' && ads.length}
                     {tab.value === 'active' && ads.filter((user) => user.visibility === true).length}
                     {tab.value === 'inactive' && ads.filter((user) => user.visibility === false).length}
-                    {tab.value === 'pending' && ads.filter((user) => user.verificationRequest  === true).length}
+                    {tab.value === 'pending' && ads.filter((user) => user.verificationRequest === true).length}
                     {tab.value === 'rejected' && ads.filter((user) => user.visibility === 'rejected').length}
                     {tab.value === 'banned' && ads.filter((user) => user.visibility === 'rejected').length}
                   </Label>
@@ -226,11 +224,11 @@ const fetchAds = ()=>{
           </Tabs>
 
           <UserTableToolbar
-          
+
             filters={filters}
             onFilters={handleFilters}
             //
-            roleOptions={['Dubai','Thailand','UK']}
+            roleOptions={['Dubai', 'Thailand', 'UK']}
           />
 
           {canReset && (
@@ -283,37 +281,28 @@ const fetchAds = ()=>{
                 />
 
                 <TableBody>
-                  {ads.map(row => (<UserTableRow
-                    key={row.id}
-                    row={row}
-                    fetchAds={fetchAds}
-                    selected={table.selected.includes(row.id)}
-                    onSelectRow={() => table.onSelectRow(row.id)}
-                    onDeleteRow={fetchAds}
-                    onEditRow={() => handleEditRow(row.id)}
-                  />))
-                  }
+                  {ads.map(row => {
+                    const isVisible = (filters.status === 'all' || (filters.status === 'active' && row.visibility) || (filters.status === 'inactive' && !row.visibility)) &&
+                      (!filters.role.length || filters.role.includes(row.region)) &&
+                      (!filters.name || row.adsTitle.toLowerCase().includes(filters.name.toLowerCase()));
 
-
-                  {/* {dataFiltered
-                    .slice(
-                      table.page * table.rowsPerPage,
-                      table.page * table.rowsPerPage + table.rowsPerPage
-                    )
-                    .map((row) => (
-                      <UserTableRow
-                        key={row.id}
-                        row={row}
-                        selected={table.selected.includes(row.id)}
-                        onSelectRow={() => table.onSelectRow(row.id)}
-                        onDeleteRow={() => handleDeleteRow(row.id)}
-                        onEditRow={() => handleEditRow(row.id)}
-                      />
-                    ))} */}
-
+                    if (isVisible) {
+                      return (
+                        <UserTableRow
+                          key={row.id}
+                          row={row}
+                          fetchAds={fetchAds}
+                          selected={table.selected.includes(row.id)}
+                          onSelectRow={() => table.onSelectRow(row.id)}
+                          onDeleteRow={fetchAds}
+                          onEditRow={() => handleEditRow(row.id)}
+                        />
+                      );
+                    }
+                    return null;
+                  })}
                   <TableEmptyRows
-                    height={denseHeight}
-                    emptyRows={emptyRows(table.page, table.rowsPerPage, tableData.length)}
+                    height={denseHeight} emptyRows={emptyRows(table.page, table.rowsPerPage, tableData.length)}
                   />
 
                   <TableNoData notFound={notFound} />

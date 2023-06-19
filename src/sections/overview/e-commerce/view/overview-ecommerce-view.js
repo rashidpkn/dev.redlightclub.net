@@ -1,10 +1,11 @@
+import { useEffect, useState } from 'react';
+import api from 'src/api';
+
 // @mui
 import { useTheme } from '@mui/material/styles';
-import Button from '@mui/material/Button';
 import Container from '@mui/material/Container';
 import Grid from '@mui/material/Unstable_Grid2';
-// hooks
-import { useMockedUser } from 'src/hooks/use-mocked-user';
+
 // _mock
 import {
   _ecommerceNewProducts,
@@ -14,24 +15,27 @@ import {
 } from 'src/_mock';
 // components
 import { useSettingsContext } from 'src/components/settings';
-// assets
-import { MotivationIllustration } from 'src/assets/illustrations';
+
 //
-import EcommerceWelcome from '../ecommerce-welcome';
-import EcommerceNewProducts from '../ecommerce-new-products';
+
+
 import EcommerceYearlySales from '../ecommerce-yearly-sales';
 import EcommerceBestSalesman from '../ecommerce-best-salesman';
 import EcommerceSaleByGender from '../ecommerce-sale-by-gender';
-import EcommerceSalesOverview from '../ecommerce-sales-overview';
 import EcommerceWidgetSummary from '../ecommerce-widget-summary';
-import EcommerceLatestProducts from '../ecommerce-latest-products';
-import EcommerceCurrentBalance from '../ecommerce-current-balance';
 
 // ----------------------------------------------------------------------
 
 export default function OverviewEcommerceView() {
-  const { user } = useMockedUser();
 
+  const [ads, setAds] = useState([])
+  const [payment, setPayment] = useState([])
+
+  useEffect(() => {  
+  api.get('ads/get-all-ads').then(res=>setAds(res.data))
+  api.get('payment').then(res=>setPayment(res.data))
+  }, [])
+  
   const theme = useTheme();
 
   const settings = useSettingsContext();
@@ -39,28 +43,12 @@ export default function OverviewEcommerceView() {
   return (
     <Container maxWidth={settings.themeStretch ? false : 'xl'}>
       <Grid container spacing={3}>
-        <Grid xs={12} md={8}>
-          <EcommerceWelcome
-            title={`Congratulations! \n ${user?.displayName}`}
-            description="Best seller of the month You have done 57.6% more sales today."
-            img={<MotivationIllustration />}
-            action={
-              <Button variant="contained" color="primary">
-                Go Now
-              </Button>
-            }
-          />
-        </Grid>
-
-        <Grid xs={12} md={4}>
-          <EcommerceNewProducts list={_ecommerceNewProducts} />
-        </Grid>
 
         <Grid xs={12} md={4}>
           <EcommerceWidgetSummary
-            title="Product Sold"
+            title="Platinum"
             percent={2.6}
-            total={765}
+            total={payment.filter(e=>e.bid.tier==='platinum').length}
             chart={{
               series: [22, 8, 35, 50, 82, 84, 77, 12, 87, 43],
             }}
@@ -69,9 +57,9 @@ export default function OverviewEcommerceView() {
 
         <Grid xs={12} md={4}>
           <EcommerceWidgetSummary
-            title="Total Balance"
+            title="Gold"
             percent={-0.1}
-            total={18765}
+            total={payment.filter(e=>e.bid.tier==='gold').length}
             chart={{
               colors: [theme.palette.info.light, theme.palette.info.main],
               series: [56, 47, 40, 62, 73, 30, 23, 54, 67, 68],
@@ -81,9 +69,9 @@ export default function OverviewEcommerceView() {
 
         <Grid xs={12} md={4}>
           <EcommerceWidgetSummary
-            title="Sales Profit"
+            title="Silver"
             percent={0.6}
-            total={4876}
+            total={payment.filter(e=>e.bid.tier==='silver').length}
             chart={{
               colors: [theme.palette.warning.light, theme.palette.warning.main],
               series: [40, 70, 75, 70, 50, 28, 7, 64, 38, 27],
@@ -93,12 +81,13 @@ export default function OverviewEcommerceView() {
 
         <Grid xs={12} md={6} lg={4}>
           <EcommerceSaleByGender
-            title="Sale By Gender"
-            total={2324}
+            title="Ads by Country"
+            total={32}
             chart={{
               series: [
-                { label: 'Mens', value: 44 },
-                { label: 'Womens', value: 75 },
+                { label: 'UAE', value: 100 },
+                { label: 'UK', value: 0 },
+                { label: 'Thailand', value: 0 },
               ],
             }}
           />
@@ -155,35 +144,22 @@ export default function OverviewEcommerceView() {
           />
         </Grid>
 
-        <Grid xs={12} md={6} lg={8}>
-          <EcommerceSalesOverview title="Sales Overview" data={_ecommerceSalesOverview} />
-        </Grid>
-
-        <Grid xs={12} md={6} lg={4}>
-          <EcommerceCurrentBalance
-            title="Current Balance"
-            currentBalance={187650}
-            sentAmount={25500}
-          />
-        </Grid>
-
+  
         <Grid xs={12} md={6} lg={8}>
           <EcommerceBestSalesman
-            title="Best Salesman"
-            tableData={_ecommerceBestSalesman}
+            title="Best Profiles"
+            tableData={ads.sort((a, b) => b.view - a.view)}
             tableLabels={[
-              { id: 'name', label: 'Seller' },
-              { id: 'category', label: 'Product' },
-              { id: 'country', label: 'Country', align: 'center' },
-              { id: 'totalAmount', label: 'Total', align: 'right' },
+              { id: 'adsTitle', label: 'Profile' },
+              { id: 'type', label: 'Type' },
+              { id: 'nationality', label: 'Country', align: 'center' },
+              { id: 'view', label: 'Total Visitors', align: 'right' },
               { id: 'rank', label: 'Rank', align: 'right' },
             ]}
           />
         </Grid>
 
-        <Grid xs={12} md={6} lg={4}>
-          <EcommerceLatestProducts title="Latest Products" list={_ecommerceLatestProducts} />
-        </Grid>
+      
       </Grid>
     </Container>
   );

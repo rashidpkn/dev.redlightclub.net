@@ -35,8 +35,8 @@ export default function EcommerceBestSalesman({
             <TableHeadCustom headLabel={tableLabels} />
 
             <TableBody>
-              {tableData.map((row) => (
-                <EcommerceBestSalesmanRow key={row.id} row={row} />
+              {tableData.map((row,index) => (
+                <EcommerceBestSalesmanRow key={row.id} row={row} index={index} />
               ))}
             </TableBody>
           </Table>
@@ -55,34 +55,35 @@ EcommerceBestSalesman.propTypes = {
 
 // ----------------------------------------------------------------------
 
-function EcommerceBestSalesmanRow({ row }) {
+function EcommerceBestSalesmanRow({ row,index }) {
   return (
     <TableRow>
       <TableCell sx={{ display: 'flex', alignItems: 'center' }}>
-        <Avatar alt={row.name} src={row.avatarUrl} sx={{ mr: 2 }} />
-        {row.name}
+        <Avatar alt={row.name} src={row.profilePhoto} sx={{ mr: 2 }} />
+        {row.adsTitle}
       </TableCell>
 
-      <TableCell>{row.category}</TableCell>
+      <TableCell>{row.category || 'Individual'}</TableCell>
 
       <TableCell align="center">
         <Iconify icon={row.flag} sx={{ borderRadius: 0.65, width: 28 }} />
+        {row.nationality}
       </TableCell>
 
-      <TableCell align="right">{fCurrency(row.totalAmount)}</TableCell>
+      <TableCell align="right">{row.view}</TableCell>
 
       <TableCell align="right">
         <Label
           variant="soft"
           color={
-            (row.rank === 'Top 1' && 'primary') ||
-            (row.rank === 'Top 2' && 'info') ||
-            (row.rank === 'Top 3' && 'success') ||
-            (row.rank === 'Top 4' && 'warning') ||
+            (index === 0 && 'primary') ||
+            (index === 1 && 'info') ||
+            (index === 2 && 'success') ||
+            (index === 3 && 'warning') ||
             'error'
           }
         >
-          {row.rank}
+          {index+1}
         </Label>
       </TableCell>
     </TableRow>
@@ -91,4 +92,5 @@ function EcommerceBestSalesmanRow({ row }) {
 
 EcommerceBestSalesmanRow.propTypes = {
   row: PropTypes.object,
+  index:PropTypes.number
 };
