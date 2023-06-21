@@ -50,18 +50,7 @@ import { AuthProvider, AuthConsumer } from 'src/auth/context/jwt';
 // ----------------------------------------------------------------------
 
 export default function App() {
-  console.log(`
-
-░░░    ░░░ 
-▒▒▒▒  ▒▒▒▒ 
-▒▒ ▒▒▒▒ ▒▒ 
-▓▓  ▓▓  ▓▓ 
-██      ██ 
-  
-  `);
-
   useScrollToTop();
-
   return (
     <AuthProvider>
       <ReduxProvider>
