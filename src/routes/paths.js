@@ -93,6 +93,7 @@ export const paths = {
   dashboard: {
     root: ROOTS.DASHBOARD,
     mail: `${ROOTS.DASHBOARD}/mail`,
+    
     chat: `${ROOTS.DASHBOARD}/chat`,
     blank: `${ROOTS.DASHBOARD}/blank`,
     kanban: `${ROOTS.DASHBOARD}/kanban`,
@@ -106,6 +107,8 @@ export const paths = {
       banking: `${ROOTS.DASHBOARD}/banking`,
       booking: `${ROOTS.DASHBOARD}/booking`,
       file: `${ROOTS.DASHBOARD}/file`,
+      auction: `${ROOTS.DASHBOARD}/auction`,
+      
     },
     user: {
       root: `${ROOTS.DASHBOARD}/user`,

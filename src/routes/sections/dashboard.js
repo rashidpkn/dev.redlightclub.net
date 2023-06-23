@@ -63,6 +63,9 @@ const PermissionDeniedPage = lazy(() => import('src/pages/dashboard/permission')
 // BLANK PAGE
 const BlankPage = lazy(() => import('src/pages/dashboard/blank'));
 
+
+const Auction = lazy(()=> import('src/pages/dashboard/auction'))
+
 // ----------------------------------------------------------------------
 
 export const dashboardRoutes = [
@@ -84,6 +87,7 @@ export const dashboardRoutes = [
       { path: 'banking', element: <OverviewBankingPage /> },
       { path: 'booking', element: <OverviewBookingPage /> },
       { path: 'file', element: <OverviewFilePage /> },
+      {path:'auction',element:<Auction />},
       {
         path: 'user',
         children: [
